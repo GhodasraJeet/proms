@@ -22,7 +22,7 @@
               <div class="col-12 col-md-12 col-lg-5">
                 <div class="card profile-widget">
                   <div class="profile-widget-header">
-                    <img alt="image" src="{{ Auth::user()->profile_picture }} " class="rounded-circle profile-widget-picture">
+                    <img alt="image" src="{{ asset('uploads/users')."/".Auth::user()->id."/".Auth::user()->profile_picture }}" class="rounded-circle profile-widget-picture">
                     <div class="profile-widget-items">
                       <div class="profile-widget-item">
                         <div class="profile-widget-item-label">Projects</div>
@@ -35,12 +35,26 @@
               </div>
               <div class="col-12 col-md-12 col-lg-7">
                 <div class="card">
-                  <form method="post" class="needs-validation" action="{{ route('profile.update') }}">
+                  <form method="post" class="needs-validation" action="{{ route('profile.update') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="card-header">
                       <h4>Edit Profile</h4>
                     </div>
                     <div class="card-body">
+                      <div class="row">
+                        <div class="form-group col-md-12">
+                          <img src="{{ asset('uploads/users')."/".Auth::user()->id."/".Auth::user()->profile_picture }}" alt="" style="border-radius:50%;width:3em;" class="mb-3">
+                          <div class="custom-file">
+                            <input type="file" class="custom-file-input" name="profile_picture" id="profile_picture">
+                            <label class="custom-file-label" for="profile_picture">Choose file</label>
+                          </div>
+                          @error('profile_picture')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                        </div>
+                      </div>
                         <div class="row">
                           <div class="form-group col-md-6 col-12">
                             <label for="name">Name</label>
