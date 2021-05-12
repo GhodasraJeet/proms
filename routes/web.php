@@ -50,3 +50,6 @@ Route::get('stage/destroy/{id?}','StageController@destroy')->name('stage.destroy
 // Task's Route
 Route::post('tasks/updatestage','TaskController@update_stage_task')->name('tasks.updatestage');
 Route::post('tasks/store','TaskController@store')->name('tasks.store');
+Route::get('tasks/show/{id?}','TaskController@show')->name('tasks.show');
+Route::post('userslist','UserController@userslist')->name('userslist');
+

@@ -143,4 +143,24 @@ class UserController extends Controller
             return $file_name;
         }
     }
+
+    public function userslist(Request $request)
+    {
+        $search = $request->search;
+
+      if($search == ''){
+         $users = User::orderby('name','asc')->select('id','name')->limit(5)->get();
+      }else{
+         $users = User::orderby('name','asc')->select('id','name')->where('name', 'like', '%' .$search . '%')->get();
+      }
+        $response = array();
+        foreach($users as $employee){
+            $response[] = array(
+                "id"=>$employee->id,
+                "text"=>$employee->name
+            );
+        }
+
+        return response()->json($response);
+    }
 }

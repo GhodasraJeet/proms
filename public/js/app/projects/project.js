@@ -46,6 +46,7 @@ $(document).ready(function() {
             var task_id=$(el).attr('data-eid');
             $('#showtaskmodal #task_id').val(task_id);
             $('#showtaskmodal').modal('show');
+            fetch_task(task_id);
       },
 
       addItemButton: false,
@@ -431,5 +432,53 @@ $(document).ready(function() {
         });
     });
 
+    var task_id;
+    // Fetch single task details
+    function fetch_task(taskid) {
+        $.ajax({
+            url : task_show_url+"/"+taskid,
+            method : "GET",
+            contentType : 'html',
+            success : function(data){
+                $('#showtaskdetails').html(data);
+                task_id=taskid;
+            }
+        });
+    }
 
-  });
+    $(document).on('change','#taskstatus',function(){
+        // $.ajax({
+        //     url:'',
+        //     method:"post",
+        //     data:{task_id:task_id},
+        //     success:function(data){
+        //         toastr.success(data.msg);
+        //     }
+        // })
+    });
+
+    $('#taskusers').select2({
+        dropdownParent: $('#addtaskmodal'),
+        placeholder: 'Select an user',
+        ajax: {
+          url: users_list_url,
+          type: "post",
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              search: params.term // search term
+            };
+          },
+          // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+          processResults: function (data) {
+            return {
+              results: data
+            };
+          },
+          cache:true
+        }
+     });
+
+
+});

@@ -170,6 +170,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         Laravolt\Avatar\ServiceProvider::class,
+        Unicodeveloper\DumbPassword\DumbPasswordServiceProvider::class
         /*
          * Application Service Providers...
          */

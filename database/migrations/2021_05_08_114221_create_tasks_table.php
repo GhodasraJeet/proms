@@ -19,6 +19,8 @@ class CreateTasksTable extends Migration
             $table->text('description');
             $table->unsignedBigInteger('project_id');
             $table->foreign('project_id')->references('id')->on('projects');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->integer('order');
             $table->unsignedBigInteger('stage_id');
             $table->foreign('stage_id')->references('id')->on('stage_details');

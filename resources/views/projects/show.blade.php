@@ -4,6 +4,7 @@
 
 @section('styles')
 <link rel="stylesheet" href="{{asset('css/jkanban.min.css')}}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 <style>
     .error {
         color: red !important;
@@ -70,7 +71,7 @@
 </div>
 
 {{-- Task add modal --}}
-<div class="modal fade" tabindex="-1" role="dialog" id="addtaskmodal">
+<div class="modal fade" role="dialog" id="addtaskmodal">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -94,6 +95,13 @@
                         <span class="error" role="alert" data-error="taskdescription">
                         </span>
                     </div>
+                    <div class="form-group">
+                        <label for="">Assigned To User</label>
+                        <select name="taskusers" id="taskusers" class="form-control select2">
+                            <option value='0'>-- Select user --</option>
+                            <option value='0'>-dfdfdf</option>
+                        </select>
+                    </div>
                     <button type="submit" class="btn btn-primary ml-auto">Save</button>
                 </form>
             </div>
@@ -112,7 +120,9 @@
                 </button>
             </div>
             <div class="modal-body">
-                <input type="hidden" name="task_id" id="task_id">
+                <div id="showtaskdetails">
+
+                </div>
             </div>
         </div>
     </div>
@@ -169,6 +179,7 @@
 {{-- <script src="{{asset('js/ckeditor.js')}}"></script> --}}
 <script src="//cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
 <script src="{{asset('js/jquery.validate.min.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 <script src="{{asset('js/jkanban.min.js')}}"></script>
 <script src="{{asset('js/app/projects/project.js')}}"></script>
 <script>
@@ -179,6 +190,8 @@ var list_stage = "{{ route('stage.list') }}";
 var update_task_stage_url = "{{ route('tasks.updatestage') }}";
 var task_store_url = "{{ route('tasks.store') }}";
 var stage_delete_url = "{{ route('stage.destroy') }}";
+var task_show_url = "{{ route('tasks.show') }}";
+var users_list_url = "{{ route('userslist') }}";
 
     $('#project-title').keypress(function(event){
         var keycode = (event.keyCode ? event.keyCode : event.which);

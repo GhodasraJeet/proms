@@ -30,4 +30,28 @@ class TaskController extends Controller
             return response()->json(['success'=>true,'msg'=>'Task stagec changed successfully']);
         }
     }
+
+    public function show($id)
+    {
+        $task=Tasks::findOrFail($id);
+        $result='';
+        $status='';
+        if($task->status==2)
+        {
+            $status="checked";
+        }
+        $result.="<div class='row'><div class='col-md-2'><div class='checkbox'>
+        <label style='font-size: 2.5em'><input type='checkbox' id='taskstatus''".$status."'><span class='cr'><i class='cr-icon fa fa-check'></i></span>
+        </label></div></div><div class='col-md-8'>";
+        $result.="<h3>".$task->title."</h3><p>".$task->description."</p>";
+        $result.="</div></div>";
+        if($task) {
+            return response()->json($result);
+        }
+    }
+
+    public function update_task_status(TaskRequest $request)
+    {
+        
+    }
 }
