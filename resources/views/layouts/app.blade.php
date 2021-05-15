@@ -6,6 +6,7 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
   <title>{{ config('app.name', 'PROMS') }} | @yield('title')</title>
 
+  <script src="{{asset('js/jquery-3.3.1.min.js')}}" ></script>
   <!-- General CSS Files -->
   <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}" >
   <link rel="stylesheet" href="{{asset('css/all.min.css')}}" >
@@ -144,7 +145,31 @@
             </ul>
         </aside>
       </div>
+{{-- All page suggestion modal --}}
+<div class="modal fade" tabindex="-1" role="dialog" id="allpagemodal">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">All page</h5>
+                <button type="button" class="close btn btn-round" data-toggle="tooltip" data-dismiss="modal" aria-label="Close" >
+                    <i class="fa fa-times text-white"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="globalsearch" placeholder="Type Here" autocomplete="false">
+                        </div>
+                        <ul class="list-group" id="routeslist">
 
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
       <!-- Main Content -->
       @yield('content')
 
@@ -155,7 +180,7 @@
 </div>
 
 <!-- General JS Scripts -->
-<script src="{{asset('js/jquery-3.3.1.min.js')}}" ></script>
+
 <script src="{{asset('js/popper.min.js')}}" ></script>
 <script src="{{asset('js/bootstrap.min.js')}}"></script>
 <script src="{{asset('js/jquery.nicescroll.min.js')}}"></script>
@@ -178,6 +203,37 @@
     }
     if (error) {
         toastr.error(error);
+    }
+    $(document).unbind("keyup").keyup(function(e){
+        var code = e.which;
+        if(code==9)
+        {
+            if(!$('.modal').is(':visible')){
+                $('#allpagemodal').modal('show');
+                globalsearch();
+            }
+        }
+    });
+
+    $(document).on('keyup','#globalsearch',function(){
+        var search = $(this).val();
+        globalsearch(search);
+    });
+    $('#allpagemodal').on('shown.bs.modal', function(){
+        $('#globalsearch').focus();
+    });
+    function globalsearch(search)
+    {
+        $.ajax({
+            url : "{{ route('routes.list') }}",
+            method : 'post',
+            data : {search:search},
+            success:function(data){
+                if(data.success){
+                    $('#routeslist').html(data.data);
+                }
+            }
+        });
     }
 </script>
 @yield('script')

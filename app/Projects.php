@@ -17,7 +17,7 @@ class Projects extends Model
     // Get User involved projects
     public function projects()
     {
-        return $this->hasOne(User_Project_Details::class,'id')->where(['user_id'=>Auth::user()->id,'status'=>1]);
+        return $this->hasOne(User_Project_Details::class,'project_id','id')->where('user_id',Auth::user()->id);
     }
 
     // Get All user involveed

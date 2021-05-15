@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Stage_Details;
 use Illuminate\Http\Request;
 use App\Http\Requests\StageRequest;
+use App\Projects;
+use Illuminate\Support\Facades\Auth;
 
 class StageController extends Controller
 {
@@ -27,7 +29,17 @@ class StageController extends Controller
 
     public function list($projectid)
     {
-        $stage_details=Stage_Details::with('tasks')->select(['id','name'])->where(['project_id'=>$projectid,'status'=>1])->orderBy('stage_order','asc')->get()->toArray();
+        $project_creator_id=Projects::where(['user_id'=>Auth::user()->id,'status'=>1,'id'=>$projectid])->first();
+        if(!is_null($project_creator_id))
+        {
+            $stage_details=Stage_Details::with('tasks')->select(['id','name'])->where(['project_id'=>$projectid,'status'=>1])->orderBy('stage_order','asc')->get()->toArray();
+        }
+        else
+        {
+            $stage_details=Stage_Details::with(['tasks'=>function($query) use($project_creator_id){
+                $query->where('user_id',Auth::user()->id);
+            }])->select(['id','name'])->where(['project_id'=>$projectid,'status'=>1])->orderBy('stage_order','asc')->get()->toArray();
+        }
         return response()->json(['success'=>true,'data'=>$stage_details]);
     }
 

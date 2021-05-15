@@ -355,10 +355,11 @@ $(document).ready(function() {
     }
 
 
-    // Open add task mmodel
+    // Open add task model
     $(document).on('click','#addtaskbtn',function(){
         $('#addtaskform').trigger("reset");
         $('#stage_id').val($(this).attr('data-stage-id'));
+        fetch_task_assign_users();
         $('#addtaskmodal').modal('show');
     });
 
@@ -370,6 +371,9 @@ $(document).ready(function() {
             },
             taskdescription: {
                 required : true,
+            },
+            taskusers : {
+                required : true
             }
         },
         highlight: function(element, errorClass, validClass) {
@@ -446,39 +450,39 @@ $(document).ready(function() {
         });
     }
 
+    // Change task status
     $(document).on('change','#taskstatus',function(){
-        // $.ajax({
-        //     url:'',
-        //     method:"post",
-        //     data:{task_id:task_id},
-        //     success:function(data){
-        //         toastr.success(data.msg);
-        //     }
-        // })
+        $.ajax({
+            url:update_task_status,
+            method:"post",
+            data:{task_id:task_id},
+            success:function(data){
+                if(data.success){
+                    if(data.check){
+                        $('#taskstatus').prop('checked',true);
+                    }
+                    else
+                    {
+                        $('#taskstatus').prop('checked',false);
+                    }
+                }
+            }
+        })
     });
 
-    $('#taskusers').select2({
-        dropdownParent: $('#addtaskmodal'),
-        placeholder: 'Select an user',
-        ajax: {
-          url: users_list_url,
-          type: "post",
-          dataType: 'json',
-          delay: 250,
-          data: function (params) {
-            return {
-              search: params.term // search term
-            };
-          },
-          // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-          processResults: function (data) {
-            return {
-              results: data
-            };
-          },
-          cache:true
-        }
-     });
-
+    // Fetch users
+    function fetch_task_assign_users(){
+        $.ajax({
+            url : users_list_url,
+            method : 'get',
+            success : function(data){
+                if(data.success)
+                {
+                    $('#taskusers').html(data.data);
+                }
+            }
+        });
+    }
 
 });
+

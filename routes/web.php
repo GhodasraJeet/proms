@@ -30,6 +30,7 @@ Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 
 // Project's route
 Route::get('projects','ProjectController@index')->name('projects.index');
+Route::post('projects','ProjectController@index')->name('projects.index');
 Route::post('projects/store','ProjectController@store')->name('projects.store');
 Route::get('projects/show/{id?}','ProjectController@show')->name('projects.show');
 Route::post('projects/update/{id?}','ProjectController@update')->name('projects.update');
@@ -51,5 +52,9 @@ Route::get('stage/destroy/{id?}','StageController@destroy')->name('stage.destroy
 Route::post('tasks/updatestage','TaskController@update_stage_task')->name('tasks.updatestage');
 Route::post('tasks/store','TaskController@store')->name('tasks.store');
 Route::get('tasks/show/{id?}','TaskController@show')->name('tasks.show');
-Route::post('userslist','UserController@userslist')->name('userslist');
+Route::post('tasks/updatestatus','TaskController@update_task_status')->name('tasks.updatestatus');
+Route::get('userslist','UserController@userslist')->name('userslist');
 
+
+
+Route::post('global','GlobalController@routelist')->name('routes.list');

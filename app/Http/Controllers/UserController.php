@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Exception;
+use App\Mail\WelcomeEmail;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\Mail;
 use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
@@ -109,13 +111,10 @@ class UserController extends Controller
                 $file_name=time() . "_" . rand(0000, 9999) . '.png';
                 @mkdir($destinationPath, 0777, true);
                 $user_image=(new \Laravolt\Avatar\Avatar)->create($request->user_name)->setBackground('#001122')->save($destinationPath."/".$file_name,100);
-                // dd($result);
-                // if($image_name=$this->profile_create($user->id,$name)){
                     $user->profile_picture=$file_name;
                     $user->save();
-                // }
-            }
-
+                }
+            Mail::to($user->email)->send(new WelcomeEmail($user));
             // if($user->save()){
 
             //     return response()->json(['success'=>true,'msg'=>'Project added successfully']);
@@ -146,21 +145,11 @@ class UserController extends Controller
 
     public function userslist(Request $request)
     {
-        $search = $request->search;
-
-      if($search == ''){
-         $users = User::orderby('name','asc')->select('id','name')->limit(5)->get();
-      }else{
-         $users = User::orderby('name','asc')->select('id','name')->where('name', 'like', '%' .$search . '%')->get();
-      }
-        $response = array();
-        foreach($users as $employee){
-            $response[] = array(
-                "id"=>$employee->id,
-                "text"=>$employee->name
-            );
+        $users = User::orderby('name','asc')->select('id','name')->get();
+        $result='<option value="">Assign Users</option>';
+        foreach($users as $user){
+            $result.='<option value="'.$user->id.'">'.$user->name.'</option>';
         }
-
-        return response()->json($response);
+        return response()->json(['success'=>true,'data'=>$result]);
     }
 }

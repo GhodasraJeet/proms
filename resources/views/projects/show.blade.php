@@ -4,7 +4,11 @@
 
 @section('styles')
 <link rel="stylesheet" href="{{asset('css/jkanban.min.css')}}">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
+{{-- <link rel="stylesheet" href="{{ asset('css/selectize.default.css') }}"> --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/js/standalone/selectize.js"></script>
+<script src="{{ asset('js/selectize.js')}}"></script>
+{{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" /> --}}
 <style>
     .error {
         color: red !important;
@@ -97,10 +101,10 @@
                     </div>
                     <div class="form-group">
                         <label for="">Assigned To User</label>
-                        <select name="taskusers" id="taskusers" class="form-control select2">
-                            <option value='0'>-- Select user --</option>
-                            <option value='0'>-dfdfdf</option>
+                        <select name="taskusers" id="taskusers" class="form-control">
                         </select>
+                        <span class="error" role="alert" data-error="taskusers">
+                        </span>
                     </div>
                     <button type="submit" class="btn btn-primary ml-auto">Save</button>
                 </form>
@@ -111,7 +115,7 @@
 
 {{-- Task show modal --}}
 <div class="modal fade" tabindex="-1" role="dialog" id="showtaskmodal">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Task Details</h5>
@@ -127,6 +131,7 @@
         </div>
     </div>
 </div>
+
 
 
 <section class="section">
@@ -162,6 +167,9 @@
             <button type="button" class="btn btn-light mb-1 ml-3" id="add-kanban-board" data-toggle="tooltip" data-original-title="Add New Board">
                 <i class="bx bx-add-to-queue mr-50"></i> Add New Board
             </button>
+            <div class="col-6">
+
+            </div>
         </div>
 
         <div id="myKanban"></div>
@@ -179,7 +187,8 @@
 {{-- <script src="{{asset('js/ckeditor.js')}}"></script> --}}
 <script src="//cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
 <script src="{{asset('js/jquery.validate.min.js')}}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+{{-- <script src="{{asset('js/select2.min.js')}}"></script> --}}
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script> --}}
 <script src="{{asset('js/jkanban.min.js')}}"></script>
 <script src="{{asset('js/app/projects/project.js')}}"></script>
 <script>
@@ -192,6 +201,7 @@ var task_store_url = "{{ route('tasks.store') }}";
 var stage_delete_url = "{{ route('stage.destroy') }}";
 var task_show_url = "{{ route('tasks.show') }}";
 var users_list_url = "{{ route('userslist') }}";
+var update_task_status = "{{ route('tasks.updatestatus') }}";
 
     $('#project-title').keypress(function(event){
         var keycode = (event.keyCode ? event.keyCode : event.which);

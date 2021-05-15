@@ -33,6 +33,13 @@ class TaskRequest extends FormRequest
                     'new_stage_id' => 'required|exists:stage_details,id,status,1',
                 ];
                 break;
+            case "tasks.store":
+                return [
+                    'tasktitle' => 'required|min:2',
+                    'taskdescription' => 'required',
+                    'taskusers' => 'required|exists:users,id,status,1',
+                ];
+                break;
             default:
             return [];
         }

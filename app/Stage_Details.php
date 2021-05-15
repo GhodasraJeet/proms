@@ -19,6 +19,6 @@ class Stage_Details extends Model
     // Get Tasks
     public function tasks()
     {
-        return $this->hasMany(Tasks::class,'stage_id','id');
+        return $this->hasMany(Tasks::class,'stage_id','id')->orderBy('order','asc');
     }
 }

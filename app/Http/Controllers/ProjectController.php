@@ -16,33 +16,25 @@ use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 class ProjectController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()){
+            $project_lists=Projects::with(['projects','users']);
 
-        // $img = Image::canvas(800, 600, '#ccc');
-        // dd($img);
-// dd($img);
-
-        $projects=Projects::with(['projects','users'])->get();
-        // $project_id=User_Project_Details::where(['user_id'=>Auth::user()->id,'status'=>1])->pluck('project_id');
-        // $projects=[];
-        // $myactivity = $i;
-        // array_push($myactivity);
-        // $activity_id= join(',', $myactivity);
-        // if($project_id->isEmpty())
-        // {
-        // }
-        // else
-        // {
-
-            // $collections=Projects::whereIn($project_id)->get();
-
-            // $projects=$projects->chunk(2);
-            // $projects->toArray();
-
+            if(!empty($request->search)){
+                $search = $request->search;
+                $project_lists->where(function($query) use($search){
+                  $query->where('title','like','%'.$search.'%')->orWhere('description','like','%'.$search.'%');
+                });
+            }
+            $projects=$project_lists->paginate(10);
+            return view('projects.pagination',compact('projects'))->render();
+        }
+        else
+        {
+            $projects=Projects::with(['projects','users'])->paginate(10);
             return view('projects.index',compact('projects'));
-        // }
-        // dd($projects);
+        }
     }
 
     public function store(ProjectRequest $request)
