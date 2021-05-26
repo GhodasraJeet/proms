@@ -139,13 +139,13 @@
     <div class="card">
         <div class="card-body d-flex justify-content-between">
             <div>
-                <h2 class="my-2" id="project-title" data-project-id="{{$project->id}}" contenteditable>{{$project->title}}</h2>
-                <span class="text-small show-read-more"  id="project-description" data-project-id="{{$project->id}}" contenteditable>{{ $project->description }}</span>
+                {{-- <h2 class="my-2" id="project-title" data-project-id="{{$project->id}}" contenteditable>{{$project->title}}</h2>
+                <span class="text-small show-read-more"  id="project-description" data-project-id="{{$project->id}}" contenteditable>{{ $project->description }}</span> --}}
             </div>
             <div>
                 <div class="d-flex align-items-center">
                     <ul class="avatars mr-4">
-                        @forelse ($project->users as $index=>$projects)
+                        {{-- @forelse ($project->users as $index=>$projects)
                         <li>
                           <a href="#" data-toggle="tooltip" data-original-title="{{$projects->user->name}}">
                             <img alt="Claire Connors" class="avatar" src="{{asset('uploads/users/'.$projects->user->id.'/'.$projects->user->profile_picture)}}">
@@ -153,7 +153,7 @@
                         </li>
                         @empty
 
-                        @endforelse
+                        @endforelse --}}
                     </ul>
                     <button class="btn btn-primary ml-3" data-toggle="modal" data-target="#addusertoprojectmodal">
                         <i class="fa fa-plus"></i>
@@ -169,11 +169,11 @@
             </button>
             <form action="" method="post">
                 <div class="form-group mt-5" id="aa">
-                    <select class="js-example-basic-single" name="state">
+                    {{-- <select class="js-example-basic-single" name="state">
                         <option value="AL">Alabama</option>
                           ...
                         <option value="WY">Wyoming</option>
-                      </select>
+                      </select> --}}
                     </div>
             </form>
         </div>
@@ -204,7 +204,6 @@ $('.js-example-basic-single').select2({
     dropdownParent: $('#aa')
 });
 
-var project_id="{{$project->id}}";
 var stage_store_url="{{ route('stage.store') }}";
 var list_stage = "{{ route('stage.list') }}";
 var update_task_stage_url = "{{ route('tasks.updatestage') }}";

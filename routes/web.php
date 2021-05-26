@@ -55,6 +55,11 @@ Route::get('tasks/show/{id?}','TaskController@show')->name('tasks.show');
 Route::post('tasks/updatestatus','TaskController@update_task_status')->name('tasks.updatestatus');
 Route::get('userslist','UserController@userslist')->name('userslist');
 
+// Comments Route
+Route::post('comments/store','CommentController@store')->name('comments.store');
 
 
 Route::post('global','GlobalController@routelist')->name('routes.list');
+
+
+Route::view('/ss','test');

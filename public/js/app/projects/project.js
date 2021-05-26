@@ -484,5 +484,35 @@ $(document).ready(function() {
         });
     }
 
+    // Add Comment on task
+    $('#comment-add-form').validate({
+        rules: {
+            user_text_comment: {
+                required : true,
+                max:600
+            }
+        },
+        highlight: function(element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+        ,submitHandler: function (form) {
+            commentstore();
+        }
+    });
+
+    function commentstore(){
+        var data = $('#comment-add-form').serialize();
+        data.append('task_id',task_id);
+        console.log(data);
+        // $.ajax({
+        //     url : $('#comment-add-form').attr('action'),
+        //     method : 'POST',
+        //     data :
+        // });
+    }
+
 });
 

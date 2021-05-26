@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Tasks;
+use App\Comments;
 use App\Mail\WelcomeEmail;
 use Illuminate\Http\Request;
 use App\Http\Requests\TaskRequest;
@@ -40,6 +41,7 @@ class TaskController extends Controller
     public function show($id)
     {
         $task=Tasks::findOrFail($id);
+        $comments=Comments::where(['task_id'=>$id])->with('user')->get();
         $result='';
         $status='';
         if($task->status==2)
@@ -51,6 +53,13 @@ class TaskController extends Controller
         </label></div></div><div class='col-md-8'>";
         $result.="<h3>".$task->title."</h3><p>".$task->description."</p>";
         $result.="</div></div>";
+        $result.="<div class='row'><div class='col-md-12'><form id='comment-add-form' action=".route('comments.store')." method='post'><div class='form-group'><textarea name='user_text_comment' class='form-control' id='user_text_comment'></textarea><button type='submit' class='btn btn-primary'>Add Comment</button></form></div></div></div>";
+        $result.="<ul>";
+        foreach($comments as $comment){
+            $result.="<li>".$comment->comment.$comment->name."</li>";
+        }
+        $result.="</ul>";
+
         if($task) {
             return response()->json($result);
         }
@@ -60,7 +69,7 @@ class TaskController extends Controller
     {
         $check='';
         $msg='';
-        $task_details=Tasks::where(['id'=>$request->task_id,'user_id'=>Auth::user()->id])->firstOrFail();
+        $task_details=Tasks::where(['id'=>$request->task_id])->firstOrFail();
         if($task_details->status==1){
             $task_details->status=2;
             $check=true;
